@@ -653,18 +653,64 @@ header.hero-header .menu { color: #fff; }
   background: #211a14;
   cursor: pointer;
 }
-.category-card img {
+.category-card img.category-main-img {
+  width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform .7s cubic-bezier(.22,.61,.36,1);
+  transition: transform .7s cubic-bezier(.22,.61,.36,1), opacity .3s ease;
 }
 .category-card::after {
   content: "";
   position: absolute; inset: 0;
   background: linear-gradient(transparent 30%, rgba(26,20,16,.85));
   border-radius: var(--radius);
+  pointer-events: none;
 }
-.category-card:hover img { transform: scale(1.08); }
+.category-card:hover img.category-main-img { transform: scale(1.08); }
+.category-card-thumbs {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 3;
+}
+.cat-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255,255,255,.5);
+  box-shadow: 0 4px 10px rgba(0,0,0,.4);
+  background: #000;
+  cursor: pointer;
+  transition: transform .2s ease, border-color .2s ease;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.cat-thumb:hover, .cat-thumb.active {
+  transform: scale(1.18);
+  border-color: var(--tan);
+}
+.cat-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cat-badge {
+  background: rgba(26,20,16,.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  font-size: .65rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 999px;
+  letter-spacing: .02em;
+}
 .category-info {
   position: absolute;
   z-index: 2;
@@ -683,8 +729,24 @@ header.hero-header .menu { color: #fff; }
 }
 .category-info p {
   font-size: .8rem;
-  color: rgba(255,255,255,.6);
+  color: rgba(255,255,255,.75);
   margin-top: 6px;
+}
+.category-explore-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tan);
+  font-size: .75rem;
+  font-weight: 600;
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all .3s ease;
+}
+.category-card:hover .category-explore-link {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ===== PRODUCTS ===== */
@@ -1356,21 +1418,132 @@ footer .brand small { color: rgba(255,255,255,.5); }
 <p>Explore key furniture categories and discuss exact designs, materials, sizes and availability with Sharma Furniture.</p>
 </div>
 <div class="category-grid">
-<article class="category-card reveal">
-<img src="images/sofa-teal-fluted-sectional.jpg" alt="Custom teal velvet fluted sectional sofa by Sharma Furniture">
-<div class="category-info"><small>01 • Living</small><h3>Sofas & Seating</h3><p>Comfortable seating for modern living spaces.</p></div>
+<article class="category-card reveal" data-target-filter="living">
+<img class="category-main-img" src="images/sofa-teal-fluted-sectional.jpg" alt="Custom teal velvet fluted sectional sofa by Sharma Furniture">
+<div class="category-card-thumbs">
+<span class="cat-thumb active" data-src="images/sofa-teal-fluted-sectional.jpg"><img src="images/sofa-teal-fluted-sectional.jpg" alt="Teal Sectional"></span>
+<span class="cat-thumb" data-src="images/sofa-chesterfield-sky-blue.jpg"><img src="images/sofa-chesterfield-sky-blue.jpg" alt="Sky Blue Chesterfield"></span>
+<span class="cat-thumb" data-src="images/living-wall-niches-blue-sofa.jpg"><img src="images/living-wall-niches-blue-sofa.jpg" alt="Royal Arch Living"></span>
+<span class="cat-badge">16 Designs</span>
+</div>
+<div class="category-info">
+<small>01 • Living Room</small>
+<h3>Sofas & Seating</h3>
+<p>Comfortable seating for modern living spaces.</p>
+<span class="category-explore-link">Explore Living Designs <i class="fa-solid fa-arrow-right"></i></span>
+</div>
 </article>
-<article class="category-card reveal">
-<img src="images/bed-luxury-cove-headboard.jpg" alt="Luxury master bed with organic cove lighting by Sharma Furniture">
-<div class="category-info"><small>02 • Bedroom</small><h3>Beds & Bedroom</h3><p>Functional bedroom furniture with a refined look.</p></div>
+
+<article class="category-card reveal" data-target-filter="living">
+<img class="category-main-img" src="images/tv-unit-marble-gold-glass.jpg" alt="Gold inlay marble and fluted TV wall console by Sharma Furniture">
+<div class="category-card-thumbs">
+<span class="cat-thumb active" data-src="images/tv-unit-marble-gold-glass.jpg"><img src="images/tv-unit-marble-gold-glass.jpg" alt="Gold Inlay Marble"></span>
+<span class="cat-thumb" data-src="images/tv-unit-curved-arch.jpg"><img src="images/tv-unit-curved-arch.jpg" alt="Curved Halo TV Console"></span>
+<span class="cat-thumb" data-src="images/tv-unit-marble-glass.jpg"><img src="images/tv-unit-marble-glass.jpg" alt="Marble TV Showcase"></span>
+<span class="cat-badge">8 Media Walls</span>
+</div>
+<div class="category-info">
+<small>02 • Entertainment</small>
+<h3>TV Units & Media</h3>
+<p>Fluted panels, backlit arches & marble consoles.</p>
+<span class="category-explore-link">Explore TV Units <i class="fa-solid fa-arrow-right"></i></span>
+</div>
 </article>
-<article class="category-card reveal">
-<img src="images/dining-kitchen-hall.jpg" alt="Dining room interior and furniture by Sharma Furniture">
-<div class="category-info"><small>03 • Dining</small><h3>Dining Furniture</h3><p>Tables and seating for everyday meals and gatherings.</p></div>
+
+<article class="category-card reveal" data-target-filter="bedroom">
+<img class="category-main-img" src="images/bed-luxury-cove-headboard.jpg" alt="Luxury master bed with organic cove lighting by Sharma Furniture">
+<div class="category-card-thumbs">
+<span class="cat-thumb active" data-src="images/bed-luxury-cove-headboard.jpg"><img src="images/bed-luxury-cove-headboard.jpg" alt="Cove Headboard Bed"></span>
+<span class="cat-thumb" data-src="images/master-bedroom-arch.jpg"><img src="images/master-bedroom-arch.jpg" alt="Master Suite Arch"></span>
+<span class="cat-thumb" data-src="images/hydraulic-beds-manufacturing-collage.jpg"><img src="images/hydraulic-beds-manufacturing-collage.jpg" alt="Hydraulic Storage Beds"></span>
+<span class="cat-badge">6 Bedrooms</span>
+</div>
+<div class="category-info">
+<small>03 • Bedroom</small>
+<h3>Beds & Bedroom</h3>
+<p>Functional bedroom furniture with a refined look.</p>
+<span class="category-explore-link">Explore Bedrooms <i class="fa-solid fa-arrow-right"></i></span>
+</div>
 </article>
-<article class="category-card reveal">
-<img src="images/wardrobe-marble-gold-bedroom.jpg" alt="Marble texture and gold trim sliding wardrobe by Sharma Furniture">
-<div class="category-info"><small>04 • Storage</small><h3>Storage Solutions</h3><p>Wardrobes, cabinets and practical organisation.</p></div>
+
+<article class="category-card reveal" data-target-filter="kitchen">
+<img class="category-main-img" src="images/kitchen-mint-marble-waterfall.jpg" alt="Mint green acrylic modular kitchen with marble waterfall island by Sharma Furniture">
+<div class="category-card-thumbs">
+<span class="cat-thumb active" data-src="images/kitchen-mint-marble-waterfall.jpg"><img src="images/kitchen-mint-marble-waterfall.jpg" alt="Mint Waterfall"></span>
+<span class="cat-thumb" data-src="images/kitchen-rose-gold.jpg"><img src="images/kitchen-rose-gold.jpg" alt="Rose Gold Kitchen"></span>
+<span class="cat-thumb" data-src="images/kitchen-grey-gloss.jpg"><img src="images/kitchen-grey-gloss.jpg" alt="Grey Gloss Kitchen"></span>
+<span class="cat-badge">8 Kitchens</span>
+</div>
+<div class="category-info">
+<small>04 • Kitchens</small>
+<h3>Modular Kitchens</h3>
+<p>Acrylic, rose gold, PU finish & profile shutters.</p>
+<span class="category-explore-link">Explore Kitchens <i class="fa-solid fa-arrow-right"></i></span>
+</div>
+</article>
+
+<article class="category-card reveal" data-target-filter="kitchen">
+<img class="category-main-img" src="images/dining-kitchen-hall.jpg" alt="Dining room interior and furniture by Sharma Furniture">
+<div class="category-card-thumbs">
+<span class="cat-thumb active" data-src="images/dining-kitchen-hall.jpg"><img src="images/dining-kitchen-hall.jpg" alt="Open Dining Room"></span>
+<span class="cat-thumb" data-src="images/crockery-cabinet-dining-console.jpg"><img src="images/crockery-cabinet-dining-console.jpg" alt="Crockery Console"></span>
+<span class="cat-thumb" data-src="images/vanity-marble-fluted-basin.jpg"><img src="images/vanity-marble-fluted-basin.jpg" alt="Marble Dining Vanity"></span>
+<span class="cat-badge">Dining & Bar</span>
+</div>
+<div class="category-info">
+<small>05 • Dining</small>
+<h3>Dining Furniture</h3>
+<p>Tables and seating for everyday meals and gatherings.</p>
+<span class="category-explore-link">Explore Dining Sets <i class="fa-solid fa-arrow-right"></i></span>
+</div>
+</article>
+
+<article class="category-card reveal" data-target-filter="storage">
+<img class="category-main-img" src="images/wardrobe-marble-gold-bedroom.jpg" alt="Marble texture and gold trim sliding wardrobe by Sharma Furniture">
+<div class="category-card-thumbs">
+<span class="cat-thumb active" data-src="images/wardrobe-marble-gold-bedroom.jpg"><img src="images/wardrobe-marble-gold-bedroom.jpg" alt="Marble & Gold"></span>
+<span class="cat-thumb" data-src="images/wardrobe-study-internal-organizer.jpg"><img src="images/wardrobe-study-internal-organizer.jpg" alt="Modular Carcass"></span>
+<span class="cat-thumb" data-src="images/wardrobe-wood-sliding.jpg"><img src="images/wardrobe-wood-sliding.jpg" alt="Teak Sliding"></span>
+<span class="cat-badge">9 Wardrobes</span>
+</div>
+<div class="category-info">
+<small>06 • Storage</small>
+<h3>Storage Solutions</h3>
+<p>Wardrobes, cabinets and practical organisation.</p>
+<span class="category-explore-link">Explore Wardrobes <i class="fa-solid fa-arrow-right"></i></span>
+</div>
+</article>
+
+<article class="category-card reveal" data-target-filter="special">
+<img class="category-main-img" src="images/mandir-bells-design.jpg" alt="Designer handcrafted pooja mandir unit with bells and LED backlighting by Sharma Furniture">
+<div class="category-card-thumbs">
+<span class="cat-thumb active" data-src="images/mandir-bells-design.jpg"><img src="images/mandir-bells-design.jpg" alt="Bell Mandir"></span>
+<span class="cat-thumb" data-src="images/living-tv-mandir-grand.jpg"><img src="images/living-tv-mandir-grand.jpg" alt="Grand Temple Wall"></span>
+<span class="cat-thumb" data-src="images/tv-mandir-unit.jpg"><img src="images/tv-mandir-unit.jpg" alt="Jaali Mandir"></span>
+<span class="cat-badge">Pooja Mandir</span>
+</div>
+<div class="category-info">
+<small>07 • Sacred Spaces</small>
+<h3>Pooja Mandir Units</h3>
+<p>Traditional jaali cutwork, bells & brass inlays.</p>
+<span class="category-explore-link">Explore Mandir Units <i class="fa-solid fa-arrow-right"></i></span>
+</div>
+</article>
+
+<article class="category-card reveal" data-target-filter="special">
+<img class="category-main-img" src="images/study-curved.jpg" alt="Custom waterfall edge study desk with overhead storage cabinets by Sharma Furniture">
+<div class="category-card-thumbs">
+<span class="cat-thumb active" data-src="images/study-curved.jpg"><img src="images/study-curved.jpg" alt="Waterfall Desk"></span>
+<span class="cat-thumb" data-src="images/study-yellow-modern.jpg"><img src="images/study-yellow-modern.jpg" alt="Yellow Workstation"></span>
+<span class="cat-thumb" data-src="images/study-desk.jpg"><img src="images/study-desk.jpg" alt="Study Desk"></span>
+<span class="cat-badge">Study Units</span>
+</div>
+<div class="category-info">
+<small>08 • Workspaces</small>
+<h3>Study & Workstations</h3>
+<p>Waterfall edge desks, overhead shelves & drawers.</p>
+<span class="category-explore-link">Explore Study Units <i class="fa-solid fa-arrow-right"></i></span>
+</div>
 </article>
 </div>
 </div>
@@ -1961,6 +2134,42 @@ function toggleHeroPlay() {
 if (heroCardAudioBtn) heroCardAudioBtn.addEventListener("click", toggleHeroAudio);
 if (heroSoundToggle) heroSoundToggle.addEventListener("click", toggleHeroAudio);
 if (heroCardPlayBtn) heroCardPlayBtn.addEventListener("click", toggleHeroPlay);
+
+// Category Card Thumbnail Switcher & Gallery Filter Link
+document.querySelectorAll(".cat-thumb").forEach(thumb => {
+  thumb.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const card = thumb.closest(".category-card");
+    if (!card) return;
+    const mainImg = card.querySelector(".category-main-img");
+    const src = thumb.dataset.src;
+    if (mainImg && src) {
+      mainImg.style.opacity = "0.35";
+      setTimeout(() => {
+        mainImg.src = src;
+        mainImg.style.opacity = "1";
+      }, 150);
+    }
+    card.querySelectorAll(".cat-thumb").forEach(t => t.classList.remove("active"));
+    thumb.classList.add("active");
+  });
+});
+
+document.querySelectorAll(".category-card").forEach(card => {
+  card.addEventListener("click", () => {
+    const targetFilter = card.dataset.targetFilter;
+    if (targetFilter) {
+      const filterBtn = document.querySelector(`.filter-btn[data-filter="${targetFilter}"]`);
+      if (filterBtn) {
+        filterBtn.click();
+        const projectsSec = document.getElementById("projects");
+        if (projectsSec) {
+          projectsSec.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+  });
+});
 
 document.getElementById("year").textContent=new Date().getFullYear();
 </script>
