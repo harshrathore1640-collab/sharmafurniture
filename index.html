@@ -308,10 +308,24 @@ header.hero-header .menu { color: #fff; }
 .hero-bg {
   position: absolute; inset: 0; z-index: -2;
 }
-.hero-bg img {
-  height: 100%;
+.hero-bg video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
   object-fit: cover;
-  object-position: center 30%;
+  object-position: center;
+  opacity: .35;
+  z-index: 1;
+}
+.hero-bg img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+.hero-bg img.active {
+  opacity: 1;
 }
 .hero::after {
   content: "";
@@ -321,7 +335,148 @@ header.hero-header .menu { color: #fff; }
     linear-gradient(90deg, rgba(26,20,16,.5) 0%, transparent 60%);
 }
 .hero-inner {
-  padding: 0 0 80px;
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  align-items: center;
+  gap: 40px;
+  padding: 0 0 70px;
+}
+.hero-content {
+  max-width: 680px;
+}
+.hero-video-card {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+}
+.hero-video-frame {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 9 / 15;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.18);
+  background: #110e0c;
+  transform: translateY(-8px);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.hero-video-frame:hover {
+  transform: translateY(-14px);
+  box-shadow: 0 30px 70px rgba(0,0,0,.65), 0 0 0 1px var(--tan);
+}
+.hero-video-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hero-video-overlay-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(26,20,16,.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  z-index: 2;
+}
+.live-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 0 rgba(34,197,94,.7);
+  animation: pulse-green 1.8s infinite;
+}
+@keyframes pulse-green {
+  0% { transform: scale(.95); box-shadow: 0 0 0 0 rgba(34,197,94,.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+  100% { transform: scale(.95); box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+.hero-video-play-btn, .hero-video-audio-btn {
+  position: absolute;
+  background: rgba(26,20,16,.68);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .25s ease;
+  z-index: 2;
+}
+.hero-video-play-btn {
+  top: 14px;
+  right: 52px;
+  width: 32px;
+  height: 32px;
+  font-size: .75rem;
+}
+.hero-video-audio-btn {
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  font-size: .8rem;
+}
+.hero-video-play-btn:hover, .hero-video-audio-btn:hover {
+  background: var(--brown-warm);
+  color: #fff;
+  transform: scale(1.08);
+}
+.hero-video-card-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 22px 14px 12px;
+  background: linear-gradient(to top, rgba(17,14,12,.95) 0%, rgba(17,14,12,.6) 65%, transparent 100%);
+  z-index: 2;
+}
+.hero-video-card-footer strong {
+  display: block;
+  font: 600 .88rem 'Playfair Display', serif;
+  color: #fff;
+}
+.hero-video-card-footer small {
+  display: block;
+  font-size: .68rem;
+  color: var(--tan);
+  margin-top: 2px;
+}
+.btn-hero-video {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.28);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: .85rem;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all .25s ease;
+}
+.btn-hero-video:hover {
+  background: rgba(255,255,255,.24);
+  border-color: #fff;
+  color: #fff;
 }
 .hero .kicker { color: var(--tan); }
 .hero h1 {
@@ -373,11 +528,12 @@ header.hero-header .menu { color: #fff; }
   align-items: center;
 }
 .about-img-wrap { position: relative; }
-.about-img-wrap img {
+.about-img-wrap > img {
   height: 580px;
   object-fit: cover;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lift);
+  transition: opacity .25s ease;
 }
 .about-img-wrap::after {
   content: "";
@@ -387,6 +543,71 @@ header.hero-header .menu { color: #fff; }
   border-radius: var(--radius-lg);
   z-index: -1;
   opacity: .35;
+}
+.about-floating-card {
+  position: absolute;
+  right: -24px;
+  bottom: -24px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 10px;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 50px rgba(44,33,24,.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 270px;
+  z-index: 3;
+}
+.about-floating-card img {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.about-floating-text strong {
+  display: block;
+  font: 600 .86rem 'Playfair Display', serif;
+  color: var(--brown-dark);
+}
+.about-floating-text small {
+  display: block;
+  font-size: .68rem;
+  color: var(--brown-warm);
+  font-weight: 600;
+}
+.about-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.about-thumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all .25s ease;
+  font-family: inherit;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--brown-dark);
+}
+.about-thumb img {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.about-thumb.active, .about-thumb:hover {
+  border-color: var(--brown-warm);
+  background: var(--cream);
+  color: var(--brown-warm);
 }
 .about-copy .kicker { margin-bottom: 14px; }
 .about-copy h3 {
@@ -537,12 +758,92 @@ header.hero-header .menu { color: #fff; }
 .video-bottom span { font-size: .86rem; }
 .video-bottom .btn-warm { font-size: .82rem; padding: 12px 22px; }
 
+.showcase-strip {
+  max-width: 1000px;
+  margin: 28px auto 0;
+}
+.showcase-strip-title {
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--brown-warm);
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.showcase-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+.showcase-thumb {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  height: 95px;
+  cursor: pointer;
+  border: 1px solid rgba(26,20,16,.12);
+  box-shadow: var(--shadow-card);
+  transition: transform .25s ease, box-shadow .25s ease;
+  background: var(--brown-dark);
+}
+.showcase-thumb:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+}
+.showcase-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.showcase-thumb span {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 6px 8px;
+  background: linear-gradient(transparent, rgba(26,20,16,.92));
+  color: #fff;
+  font-size: .62rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ===== GALLERY / PROJECTS ===== */
 .projects-section { background: var(--paper); }
+.gallery-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 42px;
+}
+.filter-btn {
+  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text-body);
+  font-weight: 600;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: all .25s ease;
+  box-shadow: var(--shadow-card);
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--brown-dark);
+  color: #fff;
+  border-color: var(--brown-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(44,33,24,.18);
+}
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: 270px;
+  grid-auto-flow: dense;
   gap: 16px;
 }
 .gallery-item {
@@ -551,6 +852,10 @@ header.hero-header .menu { color: #fff; }
   border-radius: var(--radius);
   background: var(--cream-dark);
   cursor: pointer;
+  transition: opacity .35s ease, transform .35s ease;
+}
+.gallery-item.hide-item {
+  display: none !important;
 }
 .gallery-item.tall { grid-row: span 2; }
 .gallery-item.wide { grid-column: span 2; }
@@ -803,6 +1108,56 @@ footer .brand small { color: rgba(255,255,255,.5); }
 .float-call { background: linear-gradient(135deg, #4a6a7a, #356980); }
 .float-wa { background: linear-gradient(135deg, #1daa60, #159c60); }
 
+/* ===== LIGHTBOX MODAL ===== */
+.lightbox {
+  position: fixed; inset: 0; z-index: 99999;
+  background: rgba(18,14,11,.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 30px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s ease;
+}
+.lightbox.show {
+  opacity: 1; pointer-events: auto;
+}
+.lightbox-content {
+  max-width: 900px; width: 100%;
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 30px 90px rgba(0,0,0,.6);
+  position: relative;
+  transform: scale(.95);
+  transition: transform .3s ease;
+}
+.lightbox.show .lightbox-content {
+  transform: scale(1);
+}
+.lightbox-img {
+  width: 100%; max-height: 70vh; object-fit: contain; background: #000;
+}
+.lightbox-caption {
+  padding: 20px 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--paper);
+}
+.lightbox-caption small {
+  color: var(--brown-warm); text-transform: uppercase; letter-spacing: .15em; font-size: .68rem; font-weight: 700;
+}
+.lightbox-caption h3 {
+  font: 600 1.35rem 'Playfair Display', serif; color: var(--brown-dark);
+}
+.lightbox-close {
+  position: absolute; top: 18px; right: 20px;
+  background: rgba(0,0,0,.65); color: #fff;
+  border: none; width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; cursor: pointer; font-size: 1.1rem;
+  z-index: 10; transition: background .2s;
+}
+.lightbox-close:hover { background: var(--brown-warm); }
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */
@@ -822,6 +1177,18 @@ footer .brand small { color: rgba(255,255,255,.5); }
   }
   .gallery-item.tall { grid-row: auto; }
   .gallery-item.wide { grid-column: auto; }
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding-bottom: 50px;
+  }
+  .hero-video-card {
+    justify-content: center;
+  }
+  .hero-video-frame {
+    max-width: 320px;
+    transform: none;
+  }
   .hero-tags { flex-direction: column; gap: 14px; }
   .hero-tag { border-right: none !important; padding: 0; }
 }
@@ -834,11 +1201,14 @@ footer .brand small { color: rgba(255,255,255,.5); }
 
   .about-img-wrap img { height: 380px; }
   .about-img-wrap::after { inset: 10px -10px -10px 10px; }
+  .about-floating-card { position: static; margin-top: 14px; max-width: 100%; }
 
   .category-grid,
   .product-grid,
   .review-grid,
   .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 280px; }
+
+  .showcase-thumbnails { grid-template-columns: repeat(2, 1fr); }
 
   .category-card { height: 340px; }
   .gallery-item,
@@ -883,21 +1253,52 @@ footer .brand small { color: rgba(255,255,255,.5); }
 <main>
 <section class="hero" id="home">
 <div class="hero-bg">
-<img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2200&q=90" alt="Elegant contemporary furniture interior">
+<video id="hero-bg-video" autoplay muted loop playsinline poster="images/about-sharma-furnitures.jpg">
+<source src="sharma-furniture-hero.mp4" type="video/mp4">
+</video>
+<img src="images/master-bedroom-arch.jpg" class="active" alt="Luxury master bedroom with fluted arch headboard by Sharma Furniture">
+<img src="images/living-tv-mandir-grand.jpg" alt="Grand living room wall and mandir temple by Sharma Furniture">
+<img src="images/dining-kitchen-hall.jpg" alt="Dining room interior and modular kitchen by Sharma Furniture">
+<img src="images/living-wall-niches-blue-sofa.jpg" alt="Royal arch wall niches and navy velvet sofa by Sharma Furniture">
+<img src="images/sofa-teal-fluted-sectional.jpg" alt="Peacock blue fluted velvet sectional sofa by Sharma Furniture">
 </div>
 <div class="container">
 <div class="hero-inner reveal">
+<div class="hero-content">
 <div class="kicker">Furniture • Interiors • Home Styling</div>
 <h1>Furniture that makes your space feel <span>complete.</span></h1>
 <p class="hero-desc">Sharma Furniture brings practical furniture and interior solutions together to create comfortable, functional and visually refined spaces.</p>
 <div class="hero-actions">
 <a class="btn btn-warm magnetic" href="tel:+919587929871"><i class="fa-solid fa-phone"></i> Call 9587929871</a>
 <a class="btn btn-outline magnetic" target="_blank" rel="noopener" href="https://wa.me/919587929871?text=Hello%20Sharma%20Furniture%2C%20I%20would%20like%20to%20enquire%20about%20furniture%20and%20interior%20solutions."><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+<button type="button" class="btn btn-hero-video magnetic" id="hero-sound-toggle"><i class="fa-solid fa-volume-xmark"></i> <span>Unmute Video</span></button>
 </div>
 <div class="hero-tags">
 <span class="hero-tag"><i class="fa-solid fa-couch"></i> Home Furniture</span>
 <span class="hero-tag"><i class="fa-solid fa-house"></i> Interior Solutions</span>
 <span class="hero-tag"><i class="fa-solid fa-ruler-combined"></i> Space-focused Design</span>
+</div>
+</div>
+<div class="hero-video-card">
+<div class="hero-video-frame">
+<video id="hero-card-video" autoplay muted loop playsinline poster="images/about-sharma-furnitures.jpg">
+<source src="sharma-furniture-hero.mp4" type="video/mp4">
+</video>
+<div class="hero-video-overlay-badge">
+<span class="live-pulse"></span>
+<span>Live Workshop Tour</span>
+</div>
+<button type="button" class="hero-video-play-btn" id="hero-card-play-btn" title="Pause / Play" aria-label="Play or pause video">
+<i class="fa-solid fa-pause"></i>
+</button>
+<button type="button" class="hero-video-audio-btn" id="hero-card-audio-btn" title="Mute / Unmute" aria-label="Toggle sound">
+<i class="fa-solid fa-volume-xmark"></i>
+</button>
+<div class="hero-video-card-footer">
+<strong>Sharma Furniture Factory</strong>
+<small>Lohegaon, Pune • Solid Wood & Marine Ply</small>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -907,7 +1308,28 @@ footer .brand small { color: rgba(255,255,255,.5); }
 <div class="container">
 <div class="about-grid">
 <div class="about-img-wrap reveal">
-<img src="images/living-arches.png" alt="Sharma Furniture interior with decorative arched wall panels and ambient lighting">
+<img id="about-main-img" src="images/about-sharma-furnitures.jpg" alt="Sharma Furnitures — Furniture For A Better Tomorrow, brand showcase and luxury interior solutions">
+<div class="about-floating-card">
+<img src="images/sofa-wooden-craftsmanship.jpg" alt="Solid wood craft in Sharma Furniture factory">
+<div class="about-floating-text">
+<strong>In-House Carpentry</strong>
+<small>Solid Wood & Marine Ply</small>
+</div>
+</div>
+<div class="about-thumbs">
+<button type="button" class="about-thumb active" data-img="images/about-sharma-furnitures.jpg">
+<img src="images/about-sharma-furnitures.jpg" alt="Brand Vision">
+<span>Brand Vision</span>
+</button>
+<button type="button" class="about-thumb" data-img="images/living-arches.png">
+<img src="images/living-arches.png" alt="Showroom Display">
+<span>Living & Arches</span>
+</button>
+<button type="button" class="about-thumb" data-img="images/sofa-wooden-craftsmanship.jpg">
+<img src="images/sofa-wooden-craftsmanship.jpg" alt="Workshop">
+<span>Solid Wood Craft</span>
+</button>
+</div>
 </div>
 <div class="about-copy reveal">
 <div class="kicker">About Sharma Furniture</div>
@@ -935,19 +1357,19 @@ footer .brand small { color: rgba(255,255,255,.5); }
 </div>
 <div class="category-grid">
 <article class="category-card reveal">
-<img src="images/tv-unit.png" alt="Custom TV entertainment unit by Sharma Furniture">
+<img src="images/sofa-teal-fluted-sectional.jpg" alt="Custom teal velvet fluted sectional sofa by Sharma Furniture">
 <div class="category-info"><small>01 • Living</small><h3>Sofas & Seating</h3><p>Comfortable seating for modern living spaces.</p></div>
 </article>
 <article class="category-card reveal">
-<img src="images/bed-storage.png" alt="Hydraulic storage bed with wardrobe by Sharma Furniture">
+<img src="images/bed-luxury-cove-headboard.jpg" alt="Luxury master bed with organic cove lighting by Sharma Furniture">
 <div class="category-info"><small>02 • Bedroom</small><h3>Beds & Bedroom</h3><p>Functional bedroom furniture with a refined look.</p></div>
 </article>
 <article class="category-card reveal">
-<img src="images/kitchen-glass.png" alt="Modular kitchen and dining interiors by Sharma Furniture">
+<img src="images/dining-kitchen-hall.jpg" alt="Dining room interior and furniture by Sharma Furniture">
 <div class="category-info"><small>03 • Dining</small><h3>Dining Furniture</h3><p>Tables and seating for everyday meals and gatherings.</p></div>
 </article>
 <article class="category-card reveal">
-<img src="images/wardrobe-marble.png" alt="Marble finish wardrobe with mirror by Sharma Furniture">
+<img src="images/wardrobe-marble-gold-bedroom.jpg" alt="Marble texture and gold trim sliding wardrobe by Sharma Furniture">
 <div class="category-info"><small>04 • Storage</small><h3>Storage Solutions</h3><p>Wardrobes, cabinets and practical organisation.</p></div>
 </article>
 </div>
@@ -963,19 +1385,19 @@ footer .brand small { color: rgba(255,255,255,.5); }
 </div>
 <div class="product-grid">
 <article class="product-card reveal">
-<img src="images/tv-unit.png" alt="Contemporary living room entertainment unit by Sharma Furniture">
+<img src="images/living-sectional-sofa-luxury.jpg" alt="Contemporary luxury sectional sofa suite by Sharma Furniture">
 <div class="product-body"><small>Living Room</small><h3>Contemporary Sofa</h3><p>Comfort-led seating with a clean modern silhouette.</p></div>
 </article>
 <article class="product-card reveal">
-<img src="images/bed-storage.png" alt="Hydraulic storage bed by Sharma Furniture">
+<img src="images/hydraulic-beds-manufacturing-collage.jpg" alt="Custom hydraulic storage bed manufacturing by Sharma Furniture">
 <div class="product-body"><small>Bedroom</small><h3>Bedroom Collection</h3><p>A coordinated furniture look for a calm private space.</p></div>
 </article>
 <article class="product-card reveal">
-<img src="images/pooja-mandir.png" alt="Bespoke mandir and pooja room statement unit by Sharma Furniture">
+<img src="images/living-tv-mandir-grand.jpg" alt="Grand living room wall with built-in Mandir and TV unit by Sharma Furniture">
 <div class="product-body"><small>Interior</small><h3>Statement Furniture</h3><p>Accent pieces that add character to contemporary interiors.</p></div>
 </article>
 <article class="product-card reveal">
-<img src="images/wardrobe-green.png" alt="Sage green designer wardrobe and storage by Sharma Furniture">
+<img src="images/wardrobe-study-combo.jpg" alt="Custom sliding wardrobe with integrated study desk by Sharma Furniture">
 <div class="product-body"><small>Storage</small><h3>Wardrobe & Storage</h3><p>Storage solutions planned around your room and routine.</p></div>
 </article>
 </div>
@@ -999,6 +1421,34 @@ Your browser does not support HTML5 video.
 <span><i class="fa-solid fa-play"></i> Sharma Furniture — Showroom / Project Showcase</span>
 <a class="btn btn-warm magnetic" target="_blank" rel="noopener" href="https://wa.me/919587929871?text=Hello%20Sharma%20Furniture%2C%20I%20want%20to%20see%20your%20furniture%20collection.">Ask on WhatsApp</a>
 </div>
+<div class="showcase-strip reveal">
+<div class="showcase-strip-title"><i class="fa-solid fa-camera"></i> Featured Design Reels & Walkthroughs</div>
+<div class="showcase-thumbnails">
+<div class="showcase-thumb" data-poster="images/living-tv-mandir-grand.jpg">
+<img src="images/living-tv-mandir-grand.jpg" alt="Living and Mandir">
+<span>Grand Mandir Wall</span>
+</div>
+<div class="showcase-thumb" data-poster="images/master-bedroom-arch.jpg">
+<img src="images/master-bedroom-arch.jpg" alt="Master Bedroom">
+<span>Arched Master Suite</span>
+</div>
+<div class="showcase-thumb" data-poster="images/dining-kitchen-hall.jpg">
+<img src="images/dining-kitchen-hall.jpg" alt="Dining and Kitchen">
+<span>Open-Plan Living</span>
+</div>
+<div class="showcase-thumb" data-poster="images/kitchen-rose-gold.jpg">
+<img src="images/kitchen-rose-gold.jpg" alt="Modular Kitchen">
+<span>Rose Gold Kitchen</span>
+</div>
+<div class="showcase-thumb" data-poster="images/tv-unit-curved-arch.jpg">
+<img src="images/tv-unit-curved-arch.jpg" alt="Curved Halo TV Console">
+<span>Curved Halo Console</span>
+</div>
+<div class="showcase-thumb" data-poster="images/study-curved.jpg">
+<img src="images/study-curved.jpg" alt="Waterfall Study Desk">
+<span>Waterfall Study Desk</span>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -1010,42 +1460,210 @@ Your browser does not support HTML5 video.
 <h2>Furniture that belongs naturally in the <span class="accent">space.</span></h2>
 <p>Use actual completed projects, showroom photographs and customer installations here for the strongest brand presentation.</p>
 </div>
+<div class="gallery-filters reveal">
+<button class="filter-btn active" data-filter="all">All Projects</button>
+<button class="filter-btn" data-filter="living">Living & TV Units</button>
+<button class="filter-btn" data-filter="bedroom">Bedrooms & Beds</button>
+<button class="filter-btn" data-filter="kitchen">Kitchens & Dining</button>
+<button class="filter-btn" data-filter="storage">Wardrobes & Storage</button>
+<button class="filter-btn" data-filter="special">Mandir, Vanity & Study</button>
+</div>
 <div class="gallery-grid">
-<figure class="gallery-item tall reveal">
+<figure class="gallery-item tall reveal" data-category="living">
 <img src="images/living-arches.png" alt="Sharma Furniture interior with decorative arched wall panels">
 <figcaption class="gallery-caption"><small>Living</small><h3>Warm Contemporary</h3></figcaption>
 </figure>
-<figure class="gallery-item reveal">
+<figure class="gallery-item reveal" data-category="kitchen">
 <img src="images/kitchen-modular.png" alt="Modern modular kitchen design by Sharma Furniture">
 <figcaption class="gallery-caption"><small>Dining</small><h3>Modern Dining</h3></figcaption>
 </figure>
-<figure class="gallery-item reveal">
+<figure class="gallery-item reveal" data-category="bedroom">
 <img src="images/bed-storage.png" alt="Hydraulic storage bed and bedroom furniture by Sharma Furniture">
 <figcaption class="gallery-caption"><small>Bedroom</small><h3>Quiet Comfort</h3></figcaption>
 </figure>
-<figure class="gallery-item wide reveal">
+<figure class="gallery-item wide reveal" data-category="storage">
 <img src="images/wardrobe-blue.png" alt="Floor-to-ceiling modular wardrobe by Sharma Furniture">
 <figcaption class="gallery-caption"><small>Storage</small><h3>Organised Living</h3></figcaption>
 </figure>
-<figure class="gallery-item wide reveal">
+<figure class="gallery-item wide reveal" data-category="living">
 <img src="images/tv-unit.png" alt="Modern TV entertainment wall unit by Sharma Furniture">
 <figcaption class="gallery-caption"><small>Living</small><h3>Entertainment Wall</h3></figcaption>
 </figure>
-<figure class="gallery-item reveal">
+<figure class="gallery-item reveal" data-category="special">
 <img src="images/pooja-mandir.png" alt="Bespoke mandir pooja unit with fluted panelling by Sharma Furniture">
 <figcaption class="gallery-caption"><small>Interiors</small><h3>Refined Details</h3></figcaption>
 </figure>
-<figure class="gallery-item reveal">
+<figure class="gallery-item reveal" data-category="storage">
 <img src="images/wardrobe-green.png" alt="Sage green designer wardrobe by Sharma Furniture">
 <figcaption class="gallery-caption"><small>Storage</small><h3>Bespoke Wardrobe</h3></figcaption>
 </figure>
-<figure class="gallery-item reveal">
+<figure class="gallery-item reveal" data-category="kitchen">
 <img src="images/kitchen-glass.png" alt="Illuminated glass cabinetry kitchen by Sharma Furniture">
 <figcaption class="gallery-caption"><small>Kitchen</small><h3>Illuminated Cabinetry</h3></figcaption>
 </figure>
-<figure class="gallery-item reveal">
+<figure class="gallery-item reveal" data-category="storage">
 <img src="images/wardrobe-marble.png" alt="Marble finish sliding wardrobe with vanity by Sharma Furniture">
 <figcaption class="gallery-caption"><small>Vanity & Storage</small><h3>Marble Finish Wardrobe</h3></figcaption>
+</figure>
+<figure class="gallery-item tall reveal" data-category="bedroom">
+<img src="images/master-bedroom-arch.jpg" alt="Master suite with arched fluted headboard by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Bedroom</small><h3>Fluted Arch Master Suite</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="kitchen">
+<img src="images/dining-kitchen-hall.jpg" alt="Dining room and modular kitchen by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Dining & Living</small><h3>Open-Plan Residence</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="living">
+<img src="images/tv-unit-curved-arch.jpg" alt="Curved halo LED TV console by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living</small><h3>Curved Halo TV Console</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="special">
+<img src="images/living-tv-mandir-grand.jpg" alt="Living room entertainment wall with Mandir temple by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living & Mandir</small><h3>Grand Temple & TV Wall</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="kitchen">
+<img src="images/kitchen-mint.jpg" alt="Sage mint modular kitchen by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Kitchen</small><h3>Pastel Mint Modular Kitchen</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="special">
+<img src="images/study-curved.jpg" alt="Waterfall curved study table with storage by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Study & Work</small><h3>Waterfall Edge Study Desk</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="kitchen">
+<img src="images/kitchen-rose-gold.jpg" alt="Rose gold acrylic modular kitchen by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Kitchen</small><h3>Rose Gold Acrylic Kitchen</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="storage">
+<img src="images/wardrobe-wood-sliding.jpg" alt="Sliding wooden wardrobe with bedside drawer by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Storage</small><h3>Natural Teak Sliding Wardrobe</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="special">
+<img src="images/tv-mandir-unit.jpg" alt="Living room TV unit with jaali Mandir by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living & Mandir</small><h3>Jaali Cut Mandir Console</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="special">
+<img src="images/study-desk.jpg" alt="Study workstation with shelving by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Study & Work</small><h3>Ergonomic Workstation</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="living">
+<img src="images/tv-unit-marble-glass.jpg" alt="Fluted marble TV showcase with glass tower by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living</small><h3>Fluted Marble TV Showcase</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="storage">
+<img src="images/wardrobe-grey-sliding.jpg" alt="Slate grey and white sliding wardrobe by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Storage</small><h3>Slate Grey Sliding Wardrobe</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="living">
+<img src="images/sofa-wooden-craftsmanship.jpg" alt="Handcrafted sectional sofa carcass in workshop by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Craftsmanship</small><h3>Handmade Sectional Sofa Frame</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="special">
+<img src="images/reception-counter.jpg" alt="Bespoke reception counter with fluted front by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Commercial</small><h3>Fluted Reception Counter</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="storage">
+<img src="images/wardrobe-study-combo.jpg" alt="Integrated wardrobe and study table unit by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Storage & Work</small><h3>Integrated Study & Wardrobe</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="kitchen">
+<img src="images/kitchen-grey-gloss.jpg" alt="High gloss grey modular kitchen with LED lighting by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Kitchen</small><h3>Grey Gloss Modular Kitchen</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="special">
+<img src="images/mandir-bells-design.jpg" alt="Bespoke mandir cabinet with brass bells and jaali by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Mandir Architecture</small><h3>Bell Medallion Mandir</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="bedroom">
+<img src="images/bedroom-3d-suite.jpg" alt="Complete master bedroom suite 3D visualization by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Bedroom 3D</small><h3>Master Suite Concept</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="storage">
+<img src="images/wardrobe-geometric-design.jpg" alt="Geometric sliding wardrobe with loft storage by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Wardrobes</small><h3>Geometric Loft Wardrobe</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="living">
+<img src="images/tv-unit-curved-marble-tower.jpg" alt="Curved marble TV unit with glass display tower by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living Room</small><h3>Curved Marble TV Tower</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="living">
+<img src="images/tv-wall-sconce-fluted.jpg" alt="Fluted TV wall with sconce lighting and floating console by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living Room</small><h3>Sconce Lit Fluted Wall</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="storage">
+<img src="images/wardrobe-marble-gold-bedroom.jpg" alt="Marble texture sliding wardrobe with gold trim by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Wardrobes</small><h3>Marble & Gold Trim Wardrobe</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="bedroom">
+<img src="images/bed-luxury-cove-headboard.jpg" alt="Luxury bed with organic cove lighting and fluted headboard by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Bedrooms</small><h3>Organic Cove Light Bed</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="living">
+<img src="images/tv-unit-fluted-arch-shelf.jpg" alt="Backlit marble arch TV console with display shelf by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living Room</small><h3>Arch Backlit Console Unit</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="living">
+<img src="images/living-sectional-sofa-luxury.jpg" alt="Luxury tufted sectional sofa suite by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living Room</small><h3>Tufted Sectional & Ottoman Suite</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="kitchen">
+<img src="images/kitchen-mint-marble-waterfall.jpg" alt="Mint modular kitchen with marble waterfall by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Kitchen</small><h3>Marble Waterfall Mint Kitchen</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="bedroom">
+<img src="images/hydraulic-beds-manufacturing-collage.jpg" alt="Hydraulic lift bed manufacturing by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Bedrooms</small><h3>Hydraulic Bed Manufacturing</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="special">
+<img src="images/study-yellow-modern.jpg" alt="Modern yellow and white study desk workstation by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Study & Work</small><h3>Modern Dual Pedestal Workstation</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="living">
+<img src="images/tv-unit-marble-gold-glass.jpg" alt="Marble and gold inlay TV unit with glass display by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living Room</small><h3>Gold Inlay Marble TV Console</h3></figcaption>
+</figure>
+<figure class="gallery-item tall reveal" data-category="special">
+<img src="images/vanity-marble-fluted-basin.jpg" alt="Designer Italian marble and fluted walnut wash basin vanity wall unit with LED backlight by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Bespoke Vanity Unit</small><h3>Italian Marble Wash Basin Wall</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="living">
+<img src="images/false-ceiling-living-chandelier.jpg" alt="Modern architectural false ceiling with dandelion chandelier and magnetic profile lights by Sharma Furniture">
+<figcaption class="gallery-caption"><small>False Ceiling Design</small><h3>Living Room Chandelier Ceiling</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="bedroom">
+<img src="images/false-ceiling-geometric-wood.jpg" alt="Geometric diamond wooden false ceiling with warm ambient lighting by Sharma Furniture">
+<figcaption class="gallery-caption"><small>False Ceiling Design</small><h3>Diamond Wood Rafter Ceiling</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="kitchen">
+<img src="images/crockery-cabinet-dining-console.jpg" alt="Modern dual-tier crockery display unit with warm cove lighting and walnut sideboard by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Dining & Crockery</small><h3>Dual-Tier Crockery Cabinet</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="living">
+<img src="images/sofa-teal-fluted-sectional.jpg" alt="Teal blue fluted velvet L-shaped sectional sofa with tufted ottoman and rose gold legs by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living Room Seating</small><h3>Teal Fluted Velvet Sectional</h3></figcaption>
+</figure>
+<figure class="gallery-item tall reveal" data-category="living">
+<img src="images/living-wall-niches-blue-sofa.jpg" alt="Traditional royal arch wall niches with backlit louvers and navy fluted velvet sofa by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living Room Feature Wall</small><h3>Royal Arch Niches & Sofa Suite</h3></figcaption>
+</figure>
+<figure class="gallery-item tall reveal" data-category="storage">
+<img src="images/wardrobe-study-internal-organizer.jpg" alt="Modular wardrobe interior carcass organizer and integrated study table desk unit by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Wardrobe & Study</small><h3>Wardrobe Carcass & Study Suite</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="living">
+<img src="images/sofa-charcoal-fluted-sectional.jpg" alt="Contemporary charcoal grey fluted sectional sofa with curved channel backrest by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living Room Seating</small><h3>Charcoal Fluted Corner Sofa</h3></figcaption>
+</figure>
+<figure class="gallery-item reveal" data-category="living">
+<img src="images/custom-sofa-partition-fabrication.jpg" alt="Custom on-site carpentry fabrication for storage L-sofa, foyer partition screen and wall moulding by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Factory Craft & Fabrication</small><h3>Storage L-Sofa & Foyer Partition</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="living">
+<img src="images/sofa-chesterfield-sky-blue.jpg" alt="Sky blue chesterfield sectional sofa with diamond tufting and rose gold trim by Sharma Furniture">
+<figcaption class="gallery-caption"><small>Living Room Seating</small><h3>Sky Blue Chesterfield Sectional</h3></figcaption>
+</figure>
+<figure class="gallery-item wide reveal" data-category="special">
+<img src="images/about-sharma-furnitures.jpg" alt="Sharma Furnitures — Furniture For A Better Tomorrow, signature brand identity and luxury interior collection">
+<figcaption class="gallery-caption"><small>Brand Showcase</small><h3>Sharma Furnitures Signature Suite</h3></figcaption>
 </figure>
 </div>
 </div>
@@ -1129,6 +1747,20 @@ Your browser does not support HTML5 video.
 <a class="float-wa" href="https://wa.me/919587929871?text=Hello%20Sharma%20Furniture%2C%20I%20would%20like%20to%20enquire%20about%20furniture." target="_blank" rel="noopener" aria-label="WhatsApp Sharma Furniture"><i class="fa-brands fa-whatsapp"></i></a>
 </div>
 
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project Preview">
+<div class="lightbox-content">
+<button class="lightbox-close" id="lightbox-close" aria-label="Close dialog"><i class="fa-solid fa-xmark"></i></button>
+<img id="lightbox-img" class="lightbox-img" src="" alt="">
+<div class="lightbox-caption">
+<div>
+<small id="lightbox-cat"></small>
+<h3 id="lightbox-title"></h3>
+</div>
+<a class="btn btn-warm" target="_blank" rel="noopener" href="https://wa.me/919587929871?text=Hello%20Sharma%20Furniture%2C%20I%20am%20interested%20in%20this%20design."><i class="fa-brands fa-whatsapp"></i> Enquire Now</a>
+</div>
+</div>
+</div>
+
 <script>
 window.addEventListener("load",()=>setTimeout(()=>document.getElementById("preloader").classList.add("hide"),700));
 
@@ -1200,6 +1832,136 @@ document.querySelectorAll(".navlinks a").forEach(link=>{
   }
  });
 });
+
+// Portfolio category filter tabs
+document.querySelectorAll(".filter-btn").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  const filter=btn.dataset.filter;
+  document.querySelectorAll(".gallery-grid .gallery-item").forEach(item=>{
+   if(filter==="all" || item.dataset.category===filter){
+    item.classList.remove("hide-item");
+   }else{
+    item.classList.add("hide-item");
+   }
+  });
+ });
+});
+
+// Hero Background Slideshow
+const heroImages = document.querySelectorAll(".hero-bg img");
+if(heroImages.length > 1){
+  let heroIdx = 0;
+  setInterval(()=>{
+    heroImages[heroIdx].classList.remove("active");
+    heroIdx = (heroIdx + 1) % heroImages.length;
+    heroImages[heroIdx].classList.add("active");
+  }, 5000);
+}
+
+// Lightbox Modal
+const lightbox = document.getElementById("lightbox");
+const lbImg = document.getElementById("lightbox-img");
+const lbCat = document.getElementById("lightbox-cat");
+const lbTitle = document.getElementById("lightbox-title");
+const lbClose = document.getElementById("lightbox-close");
+
+document.querySelectorAll(".gallery-item").forEach(item => {
+  item.addEventListener("click", () => {
+    const img = item.querySelector("img");
+    const cat = item.querySelector("small");
+    const title = item.querySelector("h3");
+    if(img && lightbox){
+      lbImg.src = img.src;
+      lbImg.alt = img.alt || "Sharma Furniture Project";
+      lbCat.textContent = cat ? cat.textContent : "";
+      lbTitle.textContent = title ? title.textContent : "";
+      lightbox.classList.add("show");
+    }
+  });
+});
+
+if(lbClose){
+  lbClose.addEventListener("click", () => lightbox.classList.remove("show"));
+}
+if(lightbox){
+  lightbox.addEventListener("click", (e) => {
+    if(e.target === lightbox) lightbox.classList.remove("show");
+  });
+}
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape" && lightbox) lightbox.classList.remove("show");
+});
+
+// Showcase reel thumbnails click handler
+document.querySelectorAll(".showcase-thumb").forEach(thumb => {
+  thumb.addEventListener("click", () => {
+    const poster = thumb.dataset.poster;
+    const video = document.querySelector(".video-shell video");
+    if(video && poster){
+      video.poster = poster;
+    }
+    const img = thumb.querySelector("img");
+    const span = thumb.querySelector("span");
+    if(img && lightbox){
+      lbImg.src = img.src;
+      lbImg.alt = img.alt || "Sharma Furniture Showcase";
+      lbCat.textContent = "Showroom & Design Reel";
+      lbTitle.textContent = span ? span.textContent : "";
+      lightbox.classList.add("show");
+    }
+  });
+});
+
+// About Image Switcher
+document.querySelectorAll(".about-thumb").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".about-thumb").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const mainImg = document.getElementById("about-main-img");
+    if (mainImg) {
+      mainImg.style.opacity = "0.3";
+      setTimeout(() => {
+        mainImg.src = btn.dataset.img;
+        mainImg.style.opacity = "1";
+      }, 180);
+    }
+  });
+});
+
+// Hero Video Audio & Playback Controls
+const heroCardVideo = document.getElementById("hero-card-video");
+const heroCardAudioBtn = document.getElementById("hero-card-audio-btn");
+const heroCardPlayBtn = document.getElementById("hero-card-play-btn");
+const heroSoundToggle = document.getElementById("hero-sound-toggle");
+
+function toggleHeroAudio() {
+  if (!heroCardVideo) return;
+  heroCardVideo.muted = !heroCardVideo.muted;
+  const isMuted = heroCardVideo.muted;
+  const icon = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+  if (heroCardAudioBtn) heroCardAudioBtn.innerHTML = icon;
+  if (heroSoundToggle) {
+    heroSoundToggle.innerHTML = `${icon} <span>${isMuted ? 'Unmute Video' : 'Mute Video'}</span>`;
+  }
+}
+
+function toggleHeroPlay() {
+  if (!heroCardVideo) return;
+  if (heroCardVideo.paused) {
+    heroCardVideo.play();
+    if (heroCardPlayBtn) heroCardPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+  } else {
+    heroCardVideo.pause();
+    if (heroCardPlayBtn) heroCardPlayBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+  }
+}
+
+if (heroCardAudioBtn) heroCardAudioBtn.addEventListener("click", toggleHeroAudio);
+if (heroSoundToggle) heroSoundToggle.addEventListener("click", toggleHeroAudio);
+if (heroCardPlayBtn) heroCardPlayBtn.addEventListener("click", toggleHeroPlay);
+
 document.getElementById("year").textContent=new Date().getFullYear();
 </script>
 </body>
